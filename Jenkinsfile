@@ -7,24 +7,23 @@ pipeline {
     }
 
     stages {
-        stage('Checkout Git') {
+        stage('Checkout git') {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/angieee11/test-flask.git'
             }
         }
 
-        stage('Set up VENV') {
+        stage('set up the venv') {
             steps {
                 sh '''
                     python3 -m venv $VENV
-                    $VENV/bin/python -m pip install --upgrade pip
                     $VENV/bin/pip install -r requirements.txt
                 '''
             }
         }
 
-        stage('Run the Tests') {
+        stage('RUN THE TESTS') {
             steps {
                 sh '$VENV/bin/python -m unittest discover -s tests'
             }
@@ -36,10 +35,6 @@ pipeline {
                     docker build -t $DOCKER_IMAGE:$BUILD_NUMBER .
                     docker tag $DOCKER_IMAGE:$BUILD_NUMBER $DOCKER_IMAGE:latest
                 '''
-            }
-        }
-    }
-}
             }
         }
     }
