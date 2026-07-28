@@ -26,15 +26,7 @@ pipeline {
 
         stage('Run the Tests') {
             steps {
-                sh '$VENV/bin/python manage.py test'
-            }
-        }
-        stage('Build Docker Image') {
-            steps {
-                sh '''
-                    docker build -t angy1133/test-flask:$BUILD_NUMBER .
-                    docker tag angy1133/test-flask:$BUILD_NUMBER angy1133/test-flask:latest
-                    '''
+                sh '$VENV/bin/python -m unittest discover -s tests'
             }
         }
 
@@ -46,27 +38,8 @@ pipeline {
                 '''
             }
         }
-
-        stage('Push Docker Image') {
-            steps {
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: 'dockerhub-credentials',
-                        usernameVariable: 'DOCKER_USERNAME',
-                        passwordVariable: 'DOCKER_TOKEN'
-                    )
-                ]) {
-                    sh '''
-                        echo "$DOCKER_TOKEN" | docker login \
-                            --username "$DOCKER_USERNAME" \
-                            --password-stdin
-
-                        docker push $DOCKER_IMAGE:$BUILD_NUMBER
-                        docker push $DOCKER_IMAGE:latest
-
-                        docker logout
-                    '''
-                }
+    }
+}
             }
         }
     }
