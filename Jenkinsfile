@@ -29,6 +29,14 @@ pipeline {
                 sh '$VENV/bin/python manage.py test'
             }
         }
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                    docker build -t angy1133/test-flask:$BUILD_NUMBER .
+                    docker tag angy1133/test-flask:$BUILD_NUMBER angy1133/test-flask:latest
+                    '''
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
