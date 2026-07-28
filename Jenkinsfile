@@ -32,8 +32,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh '''
-                    docker build -t $DOCKER_IMAGE:$BUILD_NUMBER .
-                    docker tag $DOCKER_IMAGE:$BUILD_NUMBER $DOCKER_IMAGE:latest
+                    docker build -t angy1133/test-flask:$BUILD_NUMBER .
+                    docker tag angy1133/test-flask:$BUILD_NUMBER angy1133/test-flask:latest
                 '''
             }
         }
